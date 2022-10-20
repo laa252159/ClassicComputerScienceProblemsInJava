@@ -18,10 +18,10 @@ package chapter1;
 
 public class Fib4 {
 
-	private static int fib4(int n) {
-		int last = 0, next = 1; // fib(0), fib(1)
-		for (int i = 0; i < n; i++) {
-			int oldLast = last;
+	public static long fib4(long n) {
+		long last = 0, next = 1; // fib(0), fib(1)
+		for (long i = 0; i < n; i++) {
+			long oldLast = last;
 			last = next;
 			next = oldLast + next;
 		}
@@ -30,6 +30,6 @@ public class Fib4 {
 
 	public static void main(String[] args) {
 		System.out.println(fib4(5));
-		System.out.println(fib4(40));
+		System.out.println(fib4(400000000L));
 	}
 }

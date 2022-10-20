@@ -95,4 +95,8 @@ public class CompressedGene {
 		System.out.println("original is the same as decompressed: " + original.equalsIgnoreCase(decompressed));
 	}
 
+	class MyBitSet extends BitSet {
+
+	}
+
 }

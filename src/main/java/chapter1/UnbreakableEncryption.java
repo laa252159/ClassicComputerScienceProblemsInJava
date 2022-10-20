@@ -16,6 +16,9 @@
 
 package chapter1;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class UnbreakableEncryption {
@@ -28,7 +31,11 @@ public class UnbreakableEncryption {
 	}
 
 	public static KeyPair encrypt(String original) {
-		byte[] originalBytes = original.getBytes();
+		return encrypt(original.getBytes());
+	}
+
+	public static KeyPair encrypt(byte[] original) {
+		byte[] originalBytes = original;
 		byte[] dummyKey = randomKey(originalBytes.length);
 		byte[] encryptedKey = new byte[originalBytes.length];
 		for (int i = 0; i < originalBytes.length; i++) {
@@ -39,17 +46,29 @@ public class UnbreakableEncryption {
 	}
 
 	public static String decrypt(KeyPair kp) {
+		return new String(decryptToArray(kp));
+	}
+
+	public static byte[] decryptToArray(KeyPair kp) {
 		byte[] decrypted = new byte[kp.key1.length];
 		for (int i = 0; i < kp.key1.length; i++) {
 			// XOR every byte
 			decrypted[i] = (byte) (kp.key1[i] ^ kp.key2[i]);
 		}
-		return new String(decrypted);
+		return decrypted;
 	}
 
-	public static void main(String[] args) {
-		KeyPair kp = encrypt("One Time Pad!");
-		String result = decrypt(kp);
-		System.out.println(result);
+	public static void main(String[] args) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get("/Users/sanix/IdeaProjects/ClassicComputerScienceProblemsInJava/src/main/resources/LC.png"));
+		KeyPair kp = encrypt(encoded);
+		File outputFile1 = new File("/Users/sanix/IdeaProjects/ClassicComputerScienceProblemsInJava/src/main/resources/LC_encoded.png");
+		try (FileOutputStream outputStream = new FileOutputStream(outputFile1)) {
+			outputStream.write(kp.key2);
+		}
+		byte[] decripted = decryptToArray(kp);
+		File outputFile2 = new File("/Users/sanix/IdeaProjects/ClassicComputerScienceProblemsInJava/src/main/resources/LC_decoded.png");
+		try (FileOutputStream outputStream = new FileOutputStream(outputFile2)) {
+			outputStream.write(decripted);
+		}
 	}
 }
